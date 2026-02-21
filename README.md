@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📽️ Transferre
+# 📥 Transferre
 
 **Um script simples e poderoso para baixar vídeos do YouTube via linha de comando.**
 
