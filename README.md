@@ -32,6 +32,17 @@ Antes de rodar o script, você precisará instalar algumas dependências. Certif
 > brew install yt-dlp node ffmpeg
 > ```
 
+## 🍪 Exportar Cookies do YouTube (Necessário)
+
+O YouTube requer autenticação para downloads. Exporte os cookies **uma única vez**:
+
+1. Instale a extensão **[Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)** no Chrome/Edge/Brave
+2. Acesse **youtube.com** e faça login na sua conta
+3. Clique na extensão e clique em **"Export"**
+4. Salve o arquivo como `cookies.txt` na mesma pasta do script
+
+> ⚠️ O script detecta automaticamente o arquivo `cookies.txt` se ele existir.
+
 ## 🛠️ Como Usar
 
 **1.** Abra o terminal na pasta onde o script está localizado.

@@ -10,6 +10,8 @@ import sys
 import json
 from pathlib import Path
 
+COOKIES_FILE = Path(__file__).parent / "cookies.txt"
+
 
 def verificar_yt_dlp():
     """Verifica se yt-dlp está instalado."""
@@ -24,7 +26,16 @@ def verificar_yt_dlp():
 
 def obter_formatos(url: str) -> dict:
     """Obtém informações e formatos disponíveis do vídeo."""
-    cmd = ["yt-dlp", "--js-runtimes", "node", "--remote-components", "ejs:github", "--dump-json", "--no-playlist", url]
+    cmd = [
+        "yt-dlp",
+        "--js-runtimes", "node",
+        "--remote-components", "ejs:github",
+        "--dump-json", "--no-playlist",
+    ]
+    if COOKIES_FILE.exists():
+        cmd.extend(["--cookies", str(COOKIES_FILE)])
+    cmd.append(url)
+    
     resultado = subprocess.run(cmd, capture_output=True, text=True)
 
     if resultado.returncode != 0:
@@ -112,8 +123,10 @@ def baixar(url: str, format_id: str, saida: str = ".") -> None:
         "-f", format_id,
         "--merge-output-format", "mp4",
         "-o", f"{diretorio}/%(title)s.%(ext)s",
-        url
     ]
+    if COOKIES_FILE.exists():
+        cmd.extend(["--cookies", str(COOKIES_FILE)])
+    cmd.append(url)
 
     print(f"\nIniciando download...\n")
     subprocess.run(cmd)
@@ -158,8 +171,11 @@ def main():
             "yt-dlp", "--js-runtimes", "node", "--remote-components", "ejs:github",
             "--progress", "--no-playlist",
             "-x", "--audio-format", "mp3", "--audio-quality", "0",
-            "-o", f"{diretorio}/%(title)s.%(ext)s", url
+            "-o", f"{diretorio}/%(title)s.%(ext)s",
         ]
+        if COOKIES_FILE.exists():
+            cmd.extend(["--cookies", str(COOKIES_FILE)])
+        cmd.append(url)
         subprocess.run(cmd)
     elif escolha == "b":
         print("\nBaixando na melhor qualidade...")
@@ -168,8 +184,11 @@ def main():
             "--progress", "--no-playlist",
             "-f", "bestvideo+bestaudio/best",
             "--merge-output-format", "mp4",
-            "-o", f"{diretorio}/%(title)s.%(ext)s", url
+            "-o", f"{diretorio}/%(title)s.%(ext)s",
         ]
+        if COOKIES_FILE.exists():
+            cmd.extend(["--cookies", str(COOKIES_FILE)])
+        cmd.append(url)
         subprocess.run(cmd)
     else:
         try:
@@ -184,8 +203,11 @@ def main():
                         "--progress", "--no-playlist",
                         "-f", f"{formato['id']}+bestaudio/best",
                         "--merge-output-format", "mp4",
-                        "-o", f"{diretorio}/%(title)s.%(ext)s", url
+                        "-o", f"{diretorio}/%(title)s.%(ext)s",
                     ]
+                    if COOKIES_FILE.exists():
+                        cmd.extend(["--cookies", str(COOKIES_FILE)])
+                    cmd.append(url)
                     subprocess.run(cmd)
                 else:
                     baixar(url, formato["id"], diretorio)
