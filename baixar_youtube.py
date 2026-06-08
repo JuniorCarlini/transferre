@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 
 COOKIES_FILE = Path(__file__).parent / "cookies.txt"
+DOWNLOADS_DIR = Path(__file__).parent / "downloads"
 
 
 def verificar_yt_dlp():
@@ -110,9 +111,10 @@ def mostrar_opcoes(info: dict, formatos: list) -> None:
     print("-" * 60)
 
 
-def baixar(url: str, format_id: str, saida: str = ".") -> None:
+def baixar(url: str, format_id: str, saida: str = str(DOWNLOADS_DIR)) -> None:
     """Baixa o vídeo na qualidade selecionada."""
     diretorio = str(Path(saida).resolve())
+    Path(diretorio).mkdir(parents=True, exist_ok=True)
 
     cmd = [
         "yt-dlp",
@@ -163,7 +165,8 @@ def main():
         print("Saindo...")
         sys.exit(0)
 
-    diretorio = input("Diretório para salvar (Enter = atual): ").strip() or "."
+    diretorio = input(f"Diretório para salvar (Enter = {DOWNLOADS_DIR}): ").strip() or str(DOWNLOADS_DIR)
+    Path(diretorio).mkdir(parents=True, exist_ok=True)
 
     if escolha == "a":
         print("\nBaixando áudio em MP3...")

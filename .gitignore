@@ -1,0 +1,14 @@
+# Pasta de downloads
+downloads/
+
+# Cookies
+cookies.txt
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
