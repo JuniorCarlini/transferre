@@ -1,6 +1,8 @@
 <div align="center">
 
-# 📥 Transferre
+<img src="assets/logo.png" alt="Transferre — YouTube Downloader" width="420">
+
+<br>
 
 **Um script simples e poderoso para baixar vídeos do YouTube via linha de comando.**
 
@@ -53,9 +55,33 @@ O YouTube requer autenticação para downloads. Exporte os cookies **uma única 
 python3 baixar_youtube.py
 ```
 
-**3.** O script interativo irá solicitar:
-- A **URL do vídeo** no YouTube.
-- A **qualidade desejada** para o download.
+**3.** Cole a **URL do vídeo** quando solicitado. O script lista os formatos disponíveis:
+
+```
+Título: Nome do vídeo
+Duração: 10:32
+Canal: Meu Canal
+============================================================
+
+Opções de download:
+
+#   Resolução    Formato Tamanho      Tipo
+------------------------------------------------------------
+1   1920x1080    mp4     142.3 MB     Vídeo
+2   1280x720     mp4     78.1 MB      Vídeo + Áudio
+3   640x360      mp4     31.7 MB      Vídeo + Áudio
+```
+
+**4.** Escolha uma opção:
+
+| Opção | O que faz |
+| :--- | :--- |
+| `1`, `2`, `3`… | Baixa o formato correspondente da lista (mescla o áudio automaticamente se o formato for só vídeo). |
+| `a` | Baixa **apenas o áudio** em MP3, na melhor qualidade. |
+| `b` | Baixa na **melhor qualidade** disponível (`bestvideo+bestaudio`). |
+| `q` | Sai do script. |
+
+**5.** Escolha a pasta de destino — ou pressione **Enter** para usar a pasta padrão `downloads/`.
 
 Aguarde o processamento e aproveite o seu vídeo offline! 🎉
 
