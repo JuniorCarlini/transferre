@@ -52,7 +52,7 @@ O YouTube requer autenticação para downloads. Exporte os cookies **uma única 
 **2.** Execute o script passando o comando abaixo:
 
 ```bash
-python3 baixar_youtube.py
+python3 main.py
 ```
 
 **3.** Cole a **URL do vídeo** quando solicitado. O script lista os formatos disponíveis:
