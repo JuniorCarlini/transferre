@@ -24,6 +24,16 @@ DOWNLOADS_DIR = Path(__file__).parent / "downloads"
 # exporte seus cookies para cookies.txt (veja o README).
 NAVEGADOR_COOKIES = "chrome"
 
+# Cliente de player do YouTube que o yt-dlp finge ser. O padrão ("android_vr")
+# passou a devolver URLs de mídia que morrem em "HTTP Error 403: Forbidden" na
+# hora de baixar os dados — os metadados vêm, mas o vídeo em si é recusado.
+#   - web_safari  → H.264 + AAC até 1080p (abre nativamente no Mac)
+#   - web_embedded → AV1/VP9 + Opus até 4K (para a opção de melhor qualidade)
+# Os dois juntos cobrem tanto o formato compatível quanto o de maior resolução,
+# e nenhum deles exige "PO Token". Se um dia voltar a dar 403, teste outros
+# clientes com: yt-dlp --extractor-args "youtube:player_client=web_safari" URL
+PLAYER_CLIENTS = "web_safari,web_embedded"
+
 # QuickTime, Fotos, iMovie e iPhone só abrem H.264 (avc1) com áudio AAC (mp4a).
 # O "melhor" do YouTube hoje é AV1 ou VP9 com áudio Opus: baixa até o fim,
 # gera um .mp4 válido, e mesmo assim não abre no Mac. Por isso a qualidade
@@ -76,7 +86,10 @@ def opcoes_cookies() -> list:
 
 def montar_cmd(url: str, *opcoes: str) -> list:
     """Monta um comando yt-dlp com as flags comuns a todos os downloads."""
-    cmd = ["yt-dlp", "--remote-components", "ejs:github", "--no-playlist"]
+    cmd = [
+        "yt-dlp", "--remote-components", "ejs:github", "--no-playlist",
+        "--extractor-args", f"youtube:player_client={PLAYER_CLIENTS}",
+    ]
 
     # Só força o node se ele existir; caso contrário deixa o yt-dlp escolher
     # sozinho o runtime JS disponível, em vez de falhar.
@@ -106,11 +119,16 @@ def mostrar_dicas_erro() -> None:
 
     if not shutil.which("node"):
         print("  - Node.js não está instalado: brew install node")
+
+    print("  - 'HTTP Error 403: Forbidden' na hora de baixar os dados: o cliente")
+    print(f"    de player do YouTube ({PLAYER_CLIENTS}) pode ter parado de")
+    print("    funcionar. Teste outro na constante PLAYER_CLIENTS lá no topo do")
+    print("    arquivo — ex.: 'web_safari', 'mweb', 'tv'.")
     if not COOKIES_FILE.exists():
-        print("  - 'HTTP Error 403' ou 'Sign in to confirm you're not a bot': o")
-        print("    YouTube recusou a sessão. Este script tenta os cookies do")
-        print(f"    {NAVEGADOR_COOKIES}; se você não está logado no YouTube nele,")
-        print("    exporte os cookies para cookies.txt (veja o README).")
+        print("  - 'Sign in to confirm you're not a bot': o YouTube recusou a")
+        print(f"    sessão. Este script tenta os cookies do {NAVEGADOR_COOKIES}; se você")
+        print("    não está logado no YouTube nele, exporte os cookies para")
+        print("    cookies.txt (veja o README).")
 
     print("  - yt-dlp desatualizado: pip install -U yt-dlp")
     print("  - Cache antigo do solver de JS: yt-dlp --rm-cache-dir")
